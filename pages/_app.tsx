@@ -5,6 +5,8 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useState, useEffect } from 'react';
 import '../styles/globals.css';
 import 'leaflet/dist/leaflet.css';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 function MyApp({ Component, pageProps }) {
   const [darkMode, setDarkMode] = useState(false);
@@ -112,6 +114,8 @@ function MyApp({ Component, pageProps }) {
       >
         <Component {...pageProps} />
       </Container>
+      <Analytics />
+      <SpeedInsights />
     </ThemeProvider>
   );
 }
