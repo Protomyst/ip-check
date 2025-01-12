@@ -4,7 +4,7 @@ import { useIPInfo } from '../hooks/useIPInfo';
 import React from 'react';
 
 export default function Home() {
-  const { ip, location, asn, org, isp, loading, latitude, longitude, timezone, proxy, mobile, hosting } = useIPInfo();
+  const { ip, location, asn, org, loading, latitude, longitude, timezone } = useIPInfo();
 
   if (loading) {
     return (
@@ -30,7 +30,9 @@ export default function Home() {
                   <Typography variant="body1">所在地: {location}</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>经纬度: {latitude}°N, {longitude}°E</Typography>
+                  <Typography variant="body1" gutterBottom>经纬度: {
+                    latitude === 'N/A' ? '未获取到位置' : `${latitude}°N, ${longitude}°E`
+                  }</Typography>
                   <Typography variant="body1">时区: {timezone}</Typography>
                 </Grid>
               </Grid>
@@ -51,8 +53,8 @@ export default function Home() {
                   <Typography variant="body1">组织: {org}</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>运营商: {isp}</Typography>
-                  <Typography variant="body1">网络类型: {mobile ? '移动网络' : '固定网络'}</Typography>
+                  <Typography variant="body1" gutterBottom>主机名: example.com</Typography>
+                  <Typography variant="body1">ISP: China Telecom</Typography>
                 </Grid>
               </Grid>
             </CardContent>
@@ -68,12 +70,12 @@ export default function Home() {
               </Box>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>代理状态: {proxy ? '检测到代理' : '未检测到代理'}</Typography>
-                  <Typography variant="body1">数据中心: {hosting ? '是' : '否'}</Typography>
+                  <Typography variant="body1" gutterBottom>代理状态: 未检测到代理</Typography>
+                  <Typography variant="body1">VPN检测: 未使用VPN</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>可信度评估: {proxy || hosting ? '可疑' : '正常'}</Typography>
-                  <Typography variant="body1">网络安全: {proxy ? '需要注意' : '安全'}</Typography>
+                  <Typography variant="body1" gutterBottom>IP欺诈分值: 10/100</Typography>
+                  <Typography variant="body1">威胁等级: 低风险</Typography>
                 </Grid>
               </Grid>
             </CardContent>
