@@ -10,11 +10,13 @@
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
-    "@mui/material": "latest",
     "@mui/icons-material": "latest",
+    "@mui/material": "latest",
+    "leaflet": "^1.9.4",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "22.10.5",

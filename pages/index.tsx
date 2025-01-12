@@ -2,11 +2,16 @@ import { Typography, Box, Grid, Card, CardContent, CircularProgress } from '@mui
 import { LocationOn, Speed, Security, VpnLock } from '@mui/icons-material';
 import { useIPInfo } from '../hooks/useIPInfo';
 import React from 'react';
+import dynamic from 'next/dynamic';
+
+const LocationMap = dynamic(() => import('../components/LocationMap'), {
+  ssr: false,
+});
 
 export default function Home() {
-  const { ip, location, asn, org, loading, latitude, longitude, timezone } = useIPInfo();
+  const ipInfo = useIPInfo();
 
-  if (loading) {
+  if (ipInfo.loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
         <CircularProgress />
@@ -14,8 +19,24 @@ export default function Home() {
     );
   }
 
+  if (ipInfo.error) {
+    return (
+      <Box sx={{ p: 2 }}>
+        <Typography color="error">{ipInfo.error}</Typography>
+      </Box>
+    );
+  }
+
+  const formatLocation = (info: any) => {
+    const parts = [info.country_name, info.region, info.city].filter(Boolean);
+    return parts.join(', ');
+  };
+
   return (
     <Box>
+      <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+        IP 信息检测
+      </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Card elevation={3}>
@@ -26,14 +47,22 @@ export default function Home() {
               </Box>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>IP 地址: {ip}</Typography>
-                  <Typography variant="body1">所在地: {location}</Typography>
+                  <Typography variant="body1" gutterBottom>IP 地址: {ipInfo.ip}</Typography>
+                  <Typography variant="body1">地理位置: {formatLocation(ipInfo)}</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>经纬度: {
-                    latitude === 'N/A' ? '未获取到位置' : `${latitude}°N, ${longitude}°E`
-                  }</Typography>
-                  <Typography variant="body1">时区: {timezone}</Typography>
+                  <Typography variant="body1">
+                    经纬度: {ipInfo.latitude}°N, {ipInfo.longitude}°E
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  {ipInfo.latitude && ipInfo.longitude && (
+                    <LocationMap
+                      latitude={ipInfo.latitude}
+                      longitude={ipInfo.longitude}
+                      popupText={formatLocation(ipInfo)}
+                    />
+                  )}
                 </Grid>
               </Grid>
             </CardContent>
@@ -49,12 +78,12 @@ export default function Home() {
               </Box>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>ASN: {asn}</Typography>
-                  <Typography variant="body1">组织: {org}</Typography>
+                  <Typography variant="body1" gutterBottom>ASN: {ipInfo.asn}</Typography>
+                  <Typography variant="body1">组织: {ipInfo.org}</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="body1" gutterBottom>主机名: example.com</Typography>
-                  <Typography variant="body1">ISP: China Telecom</Typography>
+                  <Typography variant="body1" gutterBottom>货币: {ipInfo.currency}</Typography>
+                  <Typography variant="body1">语言: {ipInfo.languages}</Typography>
                 </Grid>
               </Grid>
             </CardContent>
