@@ -34,9 +34,6 @@ export default function Home() {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
-        IP 信息检测
-      </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Card elevation={3}>
