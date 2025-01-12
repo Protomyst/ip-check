@@ -20,17 +20,20 @@ interface LocationMapProps {
 const LocationMap: React.FC<LocationMapProps> = ({ latitude, longitude, popupText }) => {
   if (typeof window === 'undefined') return null; // SSR fix
 
+  const position: L.LatLngExpression = [latitude, longitude];
+
   return (
     <MapContainer
-      center={[latitude, longitude]}
+      center={position}
       zoom={13}
+      scrollWheelZoom={false}
       style={{ height: '300px', width: '100%', borderRadius: '4px' }}
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[latitude, longitude]}>
+      <Marker position={position}>
         <Popup>{popupText}</Popup>
       </Marker>
     </MapContainer>
